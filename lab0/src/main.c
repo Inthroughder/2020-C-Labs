@@ -1,5 +1,143 @@
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-int main(void) {
-    return EXIT_SUCCESS;
+char min(char a, char b) {
+	if (a >= b) return b; else return a;
+}
+
+unsigned int pwr(char a, char b) {
+	unsigned int res = 1;
+	for (char i = b; i > 0; i--) {
+		res = res * a;
+	}
+	return res;
+}
+
+void translator(char b1, char b2, char* S, char Slen, char result[]) {
+	unsigned int res = 0;
+	unsigned int q = pwr(b1, Slen - 1);
+	for (char i = 0; i < Slen; i++) {
+		if (('A' <= S[i]) & (S[i] >= 'E')) {
+			res = res + q * (S[i] - 55);
+		}
+		else {
+			res = res + q * (S[i] - 48);
+		}
+		q = q / b1;
+	}
+
+	char i = 0;
+	while (res > 0) {
+		result[i] = res % b2;
+		res = res / b2;
+		i++;
+	}
+	result[24] = i;
+}
+
+
+
+void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
+	double res = 0;
+	double q = 1;
+	for (char i = 0; i < Slen; i++) {
+		q = q / b1;
+		if (('A' <= S[i]) & (S[i] >= 'E')) {
+			res = res + (S[i] - 55) * q;
+		} else {
+			res = res + (S[i] - 48) * q;
+		}
+	}
+	
+	char t;
+	char i;
+	q = 1;
+	for (i = 0; i < 12; i++) {
+		q = q / b2;
+		t = 0;
+		while (res >= (q * (t + 1))) {
+			t++;
+		}
+		result[i] = t;
+
+		res = res - q * t;
+		result[12] = i + 1;
+		if (res == 0) {
+			break;
+		}
+	}
+}
+
+int main(){
+	int b1, b2;
+	char S[13];
+	scanf("%d %d\n%s", &b1, &b2, S);
+
+	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
+		for (char i = 0; i < strlen(S); i++) {
+			if (S[i] == '.') {
+				continue;
+			}
+			char a;
+			if ((S[i] >= '0') && (S[i] <= '9')) {
+				a = S[i] - '0';
+			} else if ((S[i] >= 'A') && (S[i] <= 'E')) {
+				a = S[i] - 'A';
+			}
+			if (a >= b1) {
+				printf("bad input");
+				return 0;
+			}
+		}
+	} else {
+		printf("bad input");
+		return 0;
+	}
+
+	char SI[2][12];
+	char t = 0;
+	char EntLen;
+	for (EntLen = 0; EntLen < strlen(S); EntLen++) {
+		if (S[EntLen] == '.') {
+			t = 1;
+			break;
+		} else {
+			SI[0][EntLen] = S[EntLen];
+		}
+	}
+	char MantLen = -1;
+	if (t == 1) {
+		for (MantLen = 0; MantLen < strlen(S) - EntLen - 1; MantLen++) {
+			SI[1][MantLen] = S[EntLen + 1 + MantLen];
+		}
+	}
+
+	char EntRes[25];
+	char MantRes[13];
+
+	translator(b1, b2, SI[0], EntLen, &EntRes);
+	if (t == 1) {
+		ftranslator(b1, b2, SI[1], MantLen, &MantRes);
+	}
+
+	for (char j = EntRes[24] - 1; j >= 0; j--) {
+		if ((10 <= EntRes[j]) & (EntRes[j] >= 15)) {
+			printf("%c", EntRes[j] + 55);
+		}
+		else {
+			printf("%d", EntRes[j]);
+		}
+	}
+	if (t == 1) {
+		printf(".");
+		for (char j = 0; j < min(12, MantRes[12]); j++) {
+			if ((10 <= MantRes[j]) & (MantRes[j] >= 15)) {
+				printf("%c", MantRes[j] + 55);
+			}
+			else {
+				printf("%d", MantRes[j]);
+			}
+		}
+	}
+	return 0;
 }
