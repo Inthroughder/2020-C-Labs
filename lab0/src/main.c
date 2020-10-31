@@ -32,7 +32,7 @@ void translator(char b1, char b2, char* S, char Slen, char result[]) {
 		res = res / b2;
 		i++;
 	}
-	result[24] = i;
+	result[25] = i;
 }
 
 
@@ -44,11 +44,12 @@ void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
 		q = q / b1;
 		if (('A' <= S[i]) & (S[i] >= 'E')) {
 			res = res + (S[i] - 55) * q;
-		} else {
+		}
+		else {
 			res = res + (S[i] - 48) * q;
 		}
 	}
-	
+
 	char t;
 	char i;
 	q = 1;
@@ -61,18 +62,17 @@ void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
 		result[i] = t;
 
 		res = res - q * t;
-		result[12] = i + 1;
+		result[13] = i + 1;
 		if (res == 0) {
 			break;
 		}
 	}
 }
 
-int main(){
+int main() {
 	int b1, b2;
 	char S[14];
 	scanf("%d %d\n%s", &b1, &b2, S);
-
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (char i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
@@ -84,12 +84,17 @@ int main(){
 			} else if ((S[i] >= 'A') && (S[i] <= 'E')) {
 				a = S[i] - 'A';
 			}
+			else if ((S[i] >= 'a') && (S[i] <= 'e')) {
+				S[i] = S[i] - 32;
+				a = S[i] - 'A';
+			}
 			if (a >= b1) {
 				printf("bad input");
 				return 0;
 			}
 		}
-	} else {
+	}
+	else {
 		printf("bad input");
 		return 0;
 	}
@@ -101,7 +106,8 @@ int main(){
 		if (S[EntLen] == '.') {
 			t = 1;
 			break;
-		} else {
+		}
+		else {
 			SI[0][EntLen] = S[EntLen];
 		}
 	}
@@ -112,15 +118,14 @@ int main(){
 		}
 	}
 
-	char EntRes[25];
-	char MantRes[13];
-
+	char EntRes[26];
+	char MantRes[14];
 	translator(b1, b2, SI[0], EntLen, &EntRes);
 	if (t == 1) {
 		ftranslator(b1, b2, SI[1], MantLen, &MantRes);
 	}
 
-	for (char j = EntRes[24] - 1; j >= 0; j--) {
+	for (char j = EntRes[25] - 1; j >= 0; j--) {
 		if ((10 <= EntRes[j]) & (EntRes[j] <= 15)) {
 			printf("%c", EntRes[j] + 55);
 		}
@@ -130,7 +135,7 @@ int main(){
 	}
 	if (t == 1) {
 		printf(".");
-		for (char j = 0; j < min(12, MantRes[12]); j++) {
+		for (char j = 0; j < min(12, MantRes[13]); j++) {
 			if ((10 <= MantRes[j]) & (MantRes[j] <= 15)) {
 				printf("%c", MantRes[j] + 55);
 			}
