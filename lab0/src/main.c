@@ -75,6 +75,7 @@ int main() {
 	char S[14];
 	int fuck_this_compilator;
 	fuck_this_compilator = scanf("%d %d\n%s", &b1, &b2, S);
+	fuck_this_compilator++;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (unsigned int i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
@@ -122,9 +123,9 @@ int main() {
 
 	char EntRes[26];
 	char MantRes[14];
-	translator(b1, b2, SI[0], EntLen, &EntRes);
+	translator(b1, b2, SI[0], EntLen, EntRes);
 	if (t == 1) {
-		ftranslator(b1, b2, SI[1], MantLen, &MantRes);
+		ftranslator(b1, b2, SI[1], MantLen, MantRes);
 	}
 
 	for (int j = EntRes[25] - 1; j >= 0; j--) {
