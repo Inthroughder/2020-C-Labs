@@ -79,12 +79,13 @@ int main() {
 	int a = 0;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (unsigned int i = 0; i < strlen(S); i++) {
-			if ((S[i] == '.') && (fuck_this_compilator == 0)){
+			if (S[i] == '.'){
+				if (fuck_this_compilator == 1) {
+					printf("bad input");
+					return 0;
+				}
 				fuck_this_compilator = 1;
 				continue;
-			} else {
-				printf("bad input");
-				return 0;
 			}
 			if ((S[i] >= '0') && (S[i] <= '9')) {
 				a = S[i] - '0';
