@@ -50,12 +50,11 @@ void ftranslator(char b1, char b2, char* S, char Slen, char* result) {
 			res = res + (S[i] - 48) * q;
 		}
 	}
-	char t;
 	int i;
 	q = 1;
 	for (i = 0; i < 12; i++) {
 		q = q / b2;
-		t = 0;
+		char t = 0;
 		while (res >= (q * (t + 1))) {
 			t++;
 		}
@@ -72,11 +71,12 @@ void ftranslator(char b1, char b2, char* S, char Slen, char* result) {
 int main() {
 	int b1, b2;
 	char S[14];
-	int fuck_this_compilator;
-	fuck_this_compilator = scanf("%d %d\n%s", &b1, &b2, S);
-	fuck_this_compilator = 0;
+	int fuck_this_compilator_m;
+	fuck_this_compilator_m = scanf("%d %d\n%13s", &b1, &b2, S);
+	fuck_this_compilator_m++;
 	int a = 0;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
+		int fuck_this_compilator = 0;
 		for (unsigned int i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
 				if (fuck_this_compilator == 1) {
