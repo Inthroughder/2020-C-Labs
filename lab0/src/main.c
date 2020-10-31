@@ -14,11 +14,11 @@ long long int pwr(char a, char b) {
 	return res;
 }
 
-void translator(char b1, char b2, char* S, char Slen, char *result) {
+void translator(char b1, char b2, char* S, char Slen, char* result) {
 	long long int res = 0;
 	long long int q = pwr(b1, Slen - 1);
 	for (int i = 0; i < Slen; i++) {
-		if (('A' <= S[i]) & (S[i] >= 'F')) {
+		if (('A' <= S[i]) & (S[i] <= 'F')) {
 			res = res + q * (S[i] - 55);
 		}
 		else {
@@ -38,19 +38,18 @@ void translator(char b1, char b2, char* S, char Slen, char *result) {
 
 
 
-void ftranslator(char b1, char b2, char* S, char Slen, char *result) {
+void ftranslator(char b1, char b2, char* S, char Slen, char* result) {
 	double res = 0;
 	double q = 1;
 	for (int i = 0; i < Slen; i++) {
 		q = q / b1;
-		if (('A' <= S[i]) & (S[i] >= 'F')) {
+		if (('A' <= S[i]) & (S[i] <= 'F')) {
 			res = res + (S[i] - 55) * q;
 		}
 		else {
 			res = res + (S[i] - 48) * q;
 		}
 	}
-
 	char t;
 	int i;
 	q = 1;
@@ -79,7 +78,7 @@ int main() {
 	int a = 0;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (unsigned int i = 0; i < strlen(S); i++) {
-			if (S[i] == '.'){
+			if (S[i] == '.') {
 				if (fuck_this_compilator == 1) {
 					printf("bad input");
 					return 0;
@@ -89,12 +88,15 @@ int main() {
 			}
 			if ((S[i] >= '0') && (S[i] <= '9')) {
 				a = S[i] - '0';
-			} else if ((S[i] >= 'A') && (S[i] <= 'F')) {
+			}
+			else if ((S[i] >= 'A') && (S[i] <= 'F')) {
 				a = S[i] - 'A';
-			} else if ((S[i] >= 'a') && (S[i] <= 'f')) {
+			}
+			else if ((S[i] >= 'a') && (S[i] <= 'f')) {
 				S[i] = S[i] - 32;
 				a = S[i] - 'A';
-			} else {
+			}
+			else {
 				printf("bad input");
 				return 0;
 			}
@@ -121,7 +123,7 @@ int main() {
 			SI[0][EntLen] = S[EntLen];
 		}
 	}
-	if ((S[strlen(S) - 1] == '.') || (S[0] == '.')){
+	if ((S[strlen(S) - 1] == '.') || (S[0] == '.')) {
 		printf("bad input");
 		return 0;
 	}
