@@ -75,7 +75,7 @@ int main() {
 	char S[14];
 	scanf("%d %d\n%s", &b1, &b2, S);
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
-		for (int i = 0; i < strlen(S); i++) {
+		for (unsigned int i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
 				continue;
 			}
@@ -102,7 +102,7 @@ int main() {
 
 	char SI[2][12];
 	char t = 0;
-	int EntLen;
+	unsigned int EntLen;
 	for (EntLen = 0; EntLen < strlen(S); EntLen++) {
 		if (S[EntLen] == '.') {
 			t = 1;
@@ -112,9 +112,9 @@ int main() {
 			SI[0][EntLen] = S[EntLen];
 		}
 	}
-	int MantLen;
+	unsigned int MantLen;
 	if (t == 1) {
-		for (MantLen = 0; MantLen < strlen(S) - EntLen - 1; MantLen++) {
+		for (MantLen = 0; MantLen < (strlen(S) - EntLen - 1); MantLen++) {
 			SI[1][MantLen] = S[EntLen + 1 + MantLen];
 		}
 	}
