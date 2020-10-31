@@ -114,6 +114,9 @@ int main() {
 			SI[0][EntLen] = S[EntLen];
 		}
 	}
+	if (S[strlen(S) - 1] == '.'){
+		t = 0;
+	}
 	unsigned int MantLen;
 	if (t == 1) {
 		for (MantLen = 0; MantLen < (strlen(S) - EntLen - 1); MantLen++) {
