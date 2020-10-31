@@ -121,7 +121,7 @@ int main(){
 	}
 
 	for (char j = EntRes[24] - 1; j >= 0; j--) {
-		if ((10 <= EntRes[j]) & (EntRes[j] >= 15)) {
+		if ((10 <= EntRes[j]) & (EntRes[j] <= 15)) {
 			printf("%c", EntRes[j] + 55);
 		}
 		else {
@@ -131,7 +131,7 @@ int main(){
 	if (t == 1) {
 		printf(".");
 		for (char j = 0; j < min(12, MantRes[12]); j++) {
-			if ((10 <= MantRes[j]) & (MantRes[j] >= 15)) {
+			if ((10 <= MantRes[j]) & (MantRes[j] <= 15)) {
 				printf("%c", MantRes[j] + 55);
 			}
 			else {
