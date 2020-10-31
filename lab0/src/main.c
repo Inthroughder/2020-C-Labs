@@ -128,6 +128,9 @@ int main() {
 		ftranslator(b1, b2, SI[1], MantLen, MantRes);
 	}
 
+	if (EntRes[25] == 0) {
+		printf("0");
+	}
 	for (int j = EntRes[25] - 1; j >= 0; j--) {
 		if ((10 <= EntRes[j]) & (EntRes[j] <= 15)) {
 			printf("%c", EntRes[j] + 55);
