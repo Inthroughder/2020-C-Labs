@@ -14,7 +14,7 @@ unsigned int pwr(char a, char b) {
 	return res;
 }
 
-void translator(char b1, char b2, char* S, char Slen, char result[]) {
+void translator(char b1, char b2, char* S, char Slen, char *result) {
 	unsigned int res = 0;
 	unsigned int q = pwr(b1, Slen - 1);
 	for (int i = 0; i < Slen; i++) {
@@ -38,7 +38,7 @@ void translator(char b1, char b2, char* S, char Slen, char result[]) {
 
 
 
-void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
+void ftranslator(char b1, char b2, char* S, char Slen, char *result) {
 	double res = 0;
 	double q = 1;
 	for (int i = 0; i < Slen; i++) {
@@ -73,7 +73,8 @@ void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
 int main() {
 	int b1, b2;
 	char S[14];
-	scanf("%d %d\n%s", &b1, &b2, S);
+	int fuck_this_compilator;
+	fuck_this_compilator = scanf("%d %d\n%s", &b1, &b2, S);
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (unsigned int i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
