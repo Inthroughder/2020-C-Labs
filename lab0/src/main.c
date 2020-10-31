@@ -6,8 +6,8 @@ char min(char a, char b) {
 	if (a >= b) return b; else return a;
 }
 
-unsigned int pwr(char a, char b) {
-	unsigned int res = 1;
+long long int pwr(char a, char b) {
+	long long int res = 1;
 	for (int i = b; i > 0; i--) {
 		res = res * a;
 	}
@@ -15,10 +15,10 @@ unsigned int pwr(char a, char b) {
 }
 
 void translator(char b1, char b2, char* S, char Slen, char *result) {
-	unsigned int res = 0;
-	unsigned int q = pwr(b1, Slen - 1);
+	long long int res = 0;
+	long long int q = pwr(b1, Slen - 1);
 	for (int i = 0; i < Slen; i++) {
-		if (('A' <= S[i]) & (S[i] >= 'E')) {
+		if (('A' <= S[i]) & (S[i] >= 'F')) {
 			res = res + q * (S[i] - 55);
 		}
 		else {
@@ -33,7 +33,7 @@ void translator(char b1, char b2, char* S, char Slen, char *result) {
 		res = res / b2;
 		i++;
 	}
-	result[25] = i;
+	result[49] = i;
 }
 
 
@@ -43,7 +43,7 @@ void ftranslator(char b1, char b2, char* S, char Slen, char *result) {
 	double q = 1;
 	for (int i = 0; i < Slen; i++) {
 		q = q / b1;
-		if (('A' <= S[i]) & (S[i] >= 'E')) {
+		if (('A' <= S[i]) & (S[i] >= 'F')) {
 			res = res + (S[i] - 55) * q;
 		}
 		else {
@@ -89,9 +89,9 @@ int main() {
 			}
 			if ((S[i] >= '0') && (S[i] <= '9')) {
 				a = S[i] - '0';
-			} else if ((S[i] >= 'A') && (S[i] <= 'E')) {
+			} else if ((S[i] >= 'A') && (S[i] <= 'F')) {
 				a = S[i] - 'A';
-			} else if ((S[i] >= 'a') && (S[i] <= 'e')) {
+			} else if ((S[i] >= 'a') && (S[i] <= 'f')) {
 				S[i] = S[i] - 32;
 				a = S[i] - 'A';
 			} else {
@@ -132,17 +132,17 @@ int main() {
 		}
 	}
 
-	char EntRes[26];
+	char EntRes[50];
 	char MantRes[14];
 	translator(b1, b2, SI[0], EntLen, EntRes);
 	if (t == 1) {
 		ftranslator(b1, b2, SI[1], MantLen, MantRes);
 	}
 
-	if (EntRes[25] == 0) {
+	if (EntRes[49] == 0) {
 		printf("0");
 	}
-	for (int j = EntRes[25] - 1; j >= 0; j--) {
+	for (int j = EntRes[49] - 1; j >= 0; j--) {
 		if ((10 <= EntRes[j]) & (EntRes[j] <= 15)) {
 			printf("%c", EntRes[j] + 55);
 		}
