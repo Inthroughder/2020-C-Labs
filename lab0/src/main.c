@@ -74,10 +74,10 @@ int main() {
 	int fuck_this_compilator_m;
 	fuck_this_compilator_m = scanf("%d %d\n%13s", &b1, &b2, S);
 	fuck_this_compilator_m++;
-	int a = 0;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		int fuck_this_compilator = 0;
 		for (unsigned int i = 0; i < strlen(S); i++) {
+			int a = 0;
 			if (S[i] == '.') {
 				if (fuck_this_compilator == 1) {
 					printf("bad input");
