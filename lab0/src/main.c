@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#define _CRT_SECURE_NO_WARNINGS
 
 char min(char a, char b) {
 	if (a >= b) return b; else return a;
