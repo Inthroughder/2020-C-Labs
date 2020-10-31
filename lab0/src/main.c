@@ -114,8 +114,9 @@ int main() {
 			SI[0][EntLen] = S[EntLen];
 		}
 	}
-	if (S[strlen(S) - 1] == '.'){
-		t = 0;
+	if ((S[strlen(S) - 1] == '.') || (S[0] == '.')){
+		printf("bad input");
+		return 0;
 	}
 	unsigned int MantLen;
 	if (t == 1) {
