@@ -76,12 +76,12 @@ int main() {
 	int fuck_this_compilator;
 	fuck_this_compilator = scanf("%d %d\n%s", &b1, &b2, S);
 	fuck_this_compilator++;
+	int a = 0;
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
 		for (unsigned int i = 0; i < strlen(S); i++) {
 			if (S[i] == '.') {
 				continue;
 			}
-			int a;
 			if ((S[i] >= '0') && (S[i] <= '9')) {
 				a = S[i] - '0';
 			} else if ((S[i] >= 'A') && (S[i] <= 'E')) {
