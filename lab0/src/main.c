@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#define _CRT_SECURE_NO_WARNINGS
 
 char min(char a, char b) {
 	if (a >= b) return b; else return a;
@@ -71,7 +70,7 @@ void ftranslator(char b1, char b2, char* S, char Slen, char result[]) {
 
 int main(){
 	int b1, b2;
-	char S[13];
+	char S[14];
 	scanf("%d %d\n%s", &b1, &b2, S);
 
 	if ((1 < b1) && (b1 < 17) && (1 < b2) && (b2 < 17)) {
