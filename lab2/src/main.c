@@ -20,14 +20,15 @@ void sorter(int* A, int begin, int end) {
 }
 
 int main() {
-	int n, plen, res;
+	int n, plen, res, bruh;
 	char S[12];
 	int P[11];
 	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	res = scanf("%11[^\n]s", S);
 	plen = strlen(S);
+	bruh = res + 1;
 	res = scanf("%7d", &n);
-	res = 0;
+	bruh = bruh + res + 1;
 
 	for (int i = 0; i < plen; i++) {
 		if ((S[i] < '0') || (S[i] > '9') || (Check[S[i] - 48] == 1)) {
@@ -39,7 +40,7 @@ int main() {
 		}
 	}
 
-	if (n == 0) {
+	if ((n == 0) || (bruh == -2)){
 		return 0;
 	}
 
