@@ -22,9 +22,9 @@ void sorter(int* A, int begin, int end) {
 int main() {
 	int n, plen, res;
 	char S[10];
-	int P[10];
+	int P[11];
 	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	res = scanf("%s", &S);
+	res = scanf("%s", S);
 	plen = strlen(S);
 	res = scanf("%d", &n);
 	res = 0;
@@ -68,8 +68,8 @@ int main() {
 
 		sorter(P, j + 1, plen - 1);
 
-		for (int k = 0; k < plen - 1; k++) {
-			printf("%d", P[k]);
+		for (res = 0; res < plen - 1; res++) {
+			printf("%d", P[res]);
 		}
 		printf("%d\n", P[plen - 1]);
 	}
