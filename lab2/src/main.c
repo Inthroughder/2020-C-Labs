@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-
 void sorter(int* A, int begin, int end) {
 	int l = begin, r = end;
 	int v = A[l + (r - l) / 2];
@@ -21,13 +18,17 @@ void sorter(int* A, int begin, int end) {
 
 int main() {
 	int n, plen, res;
-	char S[10];
+	char S[12];
 	int P[11];
 	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	res = scanf("%s", S);
+	res = scanf("%11s", S);
 	plen = strlen(S);
 	res = scanf("%d", &n);
 	res = 0;
+
+	if (n == 0) {
+		return 0;
+	}
 
 	for (int i = 0; i < plen; i++) {
 		if ((S[i] < '0') || (S[i] > '9') || (Check[S[i] - 48] == 1)) {
@@ -39,10 +40,8 @@ int main() {
 		}
 	}
 
-	int j, t, min, ind = 0;
 	for (int i = 0; i < n; i++) {
-		min = 1000;
-		t = 0;
+		int j, t = 0, min = 1000, ind = 0;
 
 		for (j = plen - 2; j >= 0; j--) {
 			if (P[j] < P[j + 1]) {
