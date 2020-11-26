@@ -24,7 +24,7 @@ int main() {
 	char S[12];
 	int P[11];
 	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	res = scanf("%11s", S);
+	res = scanf("%[^\n]11s", S);
 	plen = strlen(S);
 	res = scanf("%d", &n);
 	res = 0;
