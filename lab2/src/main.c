@@ -1,5 +1,77 @@
-#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
-int main(void) {
-    return EXIT_SUCCESS;
+void sorter(int* A, int begin, int end) {
+	int l = begin, r = end;
+	int v = A[l + (r - l) / 2];
+	while (l <= r) {
+		while (A[l] < v) l++;
+		while (A[r] > v) r--;
+		if (l <= r) {
+			int t = A[l];
+			A[l] = A[r];
+			A[r] = t;
+			l++;
+			r--;
+		}
+	}
+	if (begin < r) sorter(A, begin, r);
+	if (l < end) sorter(A, l, end);
+}
+
+int main() {
+	int n, plen, res = 0;
+	char S[10];
+	int P[10];
+	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	scanf("%s", &S);
+	plen = strlen(S);
+	scanf("%d", &n);
+
+	for (int i = 0; i < plen; i++) {
+		if ((S[i] < '0') || (S[i] > '9') || (Check[S[i] - 48] == 1)) {
+			printf("bad input");
+			return 0;
+		} else {
+			P[i] = S[i] - 48;
+			Check[S[i] - 48] = 1;
+		}
+	}
+
+	int j, t, min, ind;
+	for (int i = 0; i < n; i++) {
+		min = 1000;
+		t = 0;
+
+		for (j = plen - 2; j >= 0; j--) {
+			if (P[j] < P[j + 1]) {
+				t = 1;
+				break;
+			}
+		}
+
+		if (t == 0) {
+			return 0;
+		}
+
+		for (int k = j + 1; k < plen; k++) {
+			if ((P[k] < min) && (P[k] > P[j])){
+				min = P[k];
+				ind = k;
+			}
+		}
+
+		t = P[ind];
+		P[ind] = P[j];
+		P[j] = t;
+
+		sorter(P, j + 1, plen - 1);
+
+		for (int k = 0; k < plen - 1; k++) {
+			printf("%d", P[k]);
+		}
+		printf("%d\n", P[plen - 1]);
+	}
+
+	return 0;
 }
