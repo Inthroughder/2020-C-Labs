@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <string.h>
+
 void sorter(int* A, int begin, int end) {
 	int l = begin, r = end;
 	int v = A[l + (r - l) / 2];
