@@ -24,14 +24,10 @@ int main() {
 	char S[12];
 	int P[11];
 	int Check[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-	res = scanf("%[^\n]11s", S);
+	res = scanf("%11[^\n]s", S);
 	plen = strlen(S);
-	res = scanf("%d", &n);
+	res = scanf("%7d", &n);
 	res = 0;
-
-	if (n == 0) {
-		return 0;
-	}
 
 	for (int i = 0; i < plen; i++) {
 		if ((S[i] < '0') || (S[i] > '9') || (Check[S[i] - 48] == 1)) {
@@ -41,6 +37,10 @@ int main() {
 			P[i] = S[i] - 48;
 			Check[S[i] - 48] = 1;
 		}
+	}
+
+	if (n == 0) {
+		return 0;
 	}
 
 	for (int i = 0; i < n; i++) {
