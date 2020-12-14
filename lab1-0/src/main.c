@@ -29,7 +29,7 @@ void BMA(char* Q, int qlen, char* S, int slen, int* D) {
 
 int main() {
 	char Q[17];
-	int D[257];
+	int D[1025];
 	char S[1000000];
 	int h;
 	h = scanf("%16s", Q);
