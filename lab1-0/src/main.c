@@ -13,12 +13,12 @@ void BMA(char* Q, int qlen, char* S, int slen, int* D) {
 				inpos--;
 			}
 			else {
-				spos = spos + D[S[spos]];
+				spos = spos + D[(int)(S[spos])];
 				break;
 			}
 
 			if (inpos == -1) {
-				spos = spos + D[S[spos]];
+				spos = spos + D[(int)(S[spos])];
 				break;
 			}
 		}
@@ -28,9 +28,9 @@ void BMA(char* Q, int qlen, char* S, int slen, int* D) {
 
 
 int main() {
-	unsigned char Q[17];
+	char Q[17];
 	int D[257];
-	unsigned char S[1000000];
+	char S[1000000];
 	int h;
 	h = scanf("%16s", Q);
 	if (h == 0) return 0;
@@ -39,7 +39,7 @@ int main() {
 		D[i] = qlen;
 	} // ZAI func
 	for (int i = 0; i < qlen - 1; i++) {
-		D[Q[i]] = qlen - i - 1;
+		D[(int)(Q[i])] = qlen - i - 1;
 	} // TAI func
 	
 	char c, t;
