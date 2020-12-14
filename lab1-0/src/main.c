@@ -28,10 +28,12 @@ void BMA(char* Q, int qlen, char* S, int slen, int* D) {
 
 
 int main() {
-	char Q[17];
+	unsigned char Q[17];
 	int D[257];
-	char S[1000000];
-	scanf("%16s", Q);
+	unsigned char S[1000000];
+	int h;
+	h = scanf("%16s", Q);
+	if (h == 0) return 0;
 	int qlen = strlen(Q);
 	for (int i = 0; i < 257; i++) {
 		D[i] = qlen;
