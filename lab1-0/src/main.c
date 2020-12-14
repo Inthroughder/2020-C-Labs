@@ -32,7 +32,7 @@ int main() {
 	int D[257];
 	char S[1000000];
 	int h;
-	h = scanf("%16s", Q);
+	h = scanf("%16[^\n]s", Q);
 	if (h == 0) return 0;
 	int qlen = strlen(Q);
 	for (int i = 0; i < 257; i++) {
