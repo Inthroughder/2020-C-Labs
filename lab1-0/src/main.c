@@ -37,7 +37,7 @@ int main() {
 	int D[257];
 	char S[17];
 	int h;
-	h = scanf("%[^\n]s", Q);
+	h = scanf("%16[^\n]s", Q);
 	if (h == 0) return 0;
 	int qlen = strlen(Q);
 	for (int i = 0; i < 257; i++) {
