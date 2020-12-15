@@ -1,6 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include <stdio.h>
+#include <string.h>
 
 int BMA(char* Q, int qlen, char* S, int* D, int spos) {
 	for (int i = qlen - 1; i >= 0; i--) {
