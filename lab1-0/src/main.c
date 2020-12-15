@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int BMA(char* Q, int qlen, char* S, int* D, int spos) {
+int BMA(char* Q, int qlen, int* S, int* D, int spos) {
 	for (int i = qlen - 1; i >= 0; i--) {
 		printf("%d ", spos - qlen + i + 1);
 		if (Q[i] != S[i]) {
@@ -13,7 +13,7 @@ int BMA(char* Q, int qlen, char* S, int* D, int spos) {
 	return qlen;
 }
 
-int SfBMA(char* Q, int qlen, char* S, int* D, int add, int spos) {
+int SfBMA(char* Q, int qlen, int* S, int* D, int add, int spos) {
 	//creating S to find Q in it
 	for (int i = 0; i < (qlen - add); i++) {
 		S[i] = S[i + add];
