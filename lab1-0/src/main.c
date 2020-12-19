@@ -23,10 +23,7 @@ int SfBMA(char* Q, int qlen, char* S, int* D, int add, int spos) {
 		S[i] = c;
 	}
 	spos = spos + add;
-
-	int newadd = BMA(Q, qlen, S, D, spos);
-	SfBMA(Q, qlen, S, D, newadd, spos);
-	return 0;
+	return spos;
 }
 
 
@@ -34,7 +31,7 @@ int main() {
 	char Q[17];
 	int D[257];
 	char S[17];
-	int h = scanf("%[^\n]s", Q);
+	int h = scanf("%16[^\n]s", Q);
 	if (h == 0) return 0;
 	int qlen = strlen(Q);
 	for (int i = 0; i < 257; i++) {
@@ -43,9 +40,16 @@ int main() {
 	for (int i = 0; i < qlen - 1; i++) {
 		D[(int)(Q[i])] = qlen - i - 1;
 	}
+
+
 	int t = getchar();
 	if (t == EOF) return 0;
-
-	SfBMA(Q, qlen, S, D, qlen, 0);
+	int add = qlen;
+	int spos = 0;
+	while (1) {
+		spos = SfBMA(Q, qlen, S, D, add, spos);
+		if (spos == 0) return 0;
+		add = BMA(Q, qlen, S, D, spos);
+	}
 	return 0;
 }
