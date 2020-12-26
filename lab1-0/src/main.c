@@ -37,7 +37,7 @@ int BMA(char *S, char *Q, int qlen, int *D) {
 				t++;
 			}
 		} else {
-			int kostyl = D[S[spos + t]] + t;
+			int kostyl = D[(int)(S[spos + t])] + t;
 			gpos = gpos + kostyl;
 			spos = spos + kostyl;
 			t = 0;
@@ -65,13 +65,16 @@ int main(void) {
 	int D[256];
 	char S[BUFFER + 16];
 
-	scanf("%16[^\n]s", Q);
+	if (scanf("%16[^\n]s", Q) == 0)
+		return 0;
 
 	int qlen = strlen(Q);
 
 	Dfill(D, Q, qlen);
 
 	int t = getchar();
+	if (t == 0)
+		return 0;
 
 	BMA(S, Q, qlen, D);
 
