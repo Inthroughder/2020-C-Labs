@@ -1,14 +1,5 @@
 #include <stdio.h>
 
-int QS(int* A, int l, int r) {
-	while (l < r) {
-		int m = AD(A, l, r);
-		QS(A, l, m - 1);
-		l = m + 1;
-	}
-	return 0;
-}
-
 int AD(int* A, int l, int r) {
 	int res = l;
 	int k = r - l;
@@ -37,12 +28,21 @@ int AD(int* A, int l, int r) {
 	return r;
 }
 
+int QS(int* A, int l, int r) {
+	while (l < r) {
+		int m = AD(A, l, r);
+		QS(A, l, m - 1);
+		l = m + 1;
+	}
+	return 0;
+}
+
 int main() {
 	int n;
 	int A[200];
-	scanf("%d", &n);
+	int t = scanf("%d", &n);
 	for (int i = 0; i < n; i++) {
-		scanf("%d", &A[i]);
+		if (t > 0) t = scanf("%d", &A[i]);
 	}
 	
 	QS(A, 0, n - 1);
