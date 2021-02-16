@@ -1,9 +1,8 @@
 #include <stdio.h>
 
 int AD(int* A, int l, int r) {
-	int res = l;
+	int res = (l + r) / 2;
 	int k = r - l;
-	l++;
 	for (int i = 0; i < k; i++) {
 		if (A[l] <= A[res]) {
 			l++;
@@ -25,7 +24,7 @@ int AD(int* A, int l, int r) {
 	A[r] = A[res];
 	A[res] = t;
 
-	return r;
+	return l;
 }
 
 int QS(int* A, int l, int r) {
