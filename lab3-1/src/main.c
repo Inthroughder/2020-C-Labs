@@ -39,7 +39,7 @@ int QS(int* A, int l, int r) {
 
 int main() {
 	int n;
-	int A[200];
+	int A[2000000];
 	int t = scanf("%d", &n);
 	for (int i = 0; i < n; i++) {
 		if (t > 0) t = scanf("%d", &A[i]);
