@@ -19,17 +19,17 @@ int AD(int* A, int l, int r) {
 }
 
 int QS(int* A, int l, int r) {
-	if (l < r) {
+	while (l < r) {
 		int m = AD(A, l, r);
 		QS(A, l, m);
-		QS(A, m + 1, r);
+		l = m + 1;
 	}
 	return 0;
 }
 
 int main(void) {
 	int n;
-	int A[2000000];
+	int A[200];
 
 	if (scanf("%d", &n) != 1) {
 		return -1;
