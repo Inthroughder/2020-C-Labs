@@ -29,7 +29,7 @@ int QS(int* A, int l, int r) {
 
 int main(void) {
 	int n;
-	int A[200];
+	int A[2000000];
 
 	if (scanf("%d", &n) != 1) {
 		return -1;
