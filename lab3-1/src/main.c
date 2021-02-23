@@ -30,9 +30,14 @@ int QS(int* A, int l, int r) {
 int main(void) {
 	int n;
 	int A[200];
-	scanf("%d", &n);
+
+	if (scanf("%d", &n) != 1) {
+		return -1;
+	}
 	for (int i = 0; i < n; i++) {
-		scanf("%d", &A[i]);
+		if (scanf("%d", &A[i]) != 1) {
+			return -1;
+		}
 	}
 	
 	QS(A, 0, n - 1);
