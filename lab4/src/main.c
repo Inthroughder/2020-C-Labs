@@ -174,7 +174,7 @@ int main(void) {
 	//gets(In);
 	//n = strlen(In);
 
-	int k = fgets(In, BUFFER, stdin);
+	char* k = fgets(In, BUFFER, stdin);
 	//printf("k = %d\n", k);
 	int n = strlen(In) - 1;
 	if ((n == 0) || (k == 0)) {
