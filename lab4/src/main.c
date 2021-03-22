@@ -175,7 +175,7 @@ int main(void) {
 	//gets(In);
 	//n = strlen(In);
 
-	n = scanf("%s", In);
+	n = scanf("%1000s", In);
 	if (n == 0) {
 		printf("syntax error");
 		return 0;
