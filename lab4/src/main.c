@@ -170,17 +170,16 @@ int Calculator(int* RPN, int rpnlen) {
 int main(void) {
 	char In[BUFFER + 1];
 	int RPN[BUFFER];
-	int n;
 
 	//gets(In);
 	//n = strlen(In);
 
-	n = scanf("%1000s", In);
+	fgets(In, BUFFER, stdin);
+	int n = strlen(In) - 1;
 	if (n == 0) {
 		printf("syntax error");
 		return 0;
 	}
-	n = strlen(In);
 
 	//for (n = 0; n < BUFFER + 1; n++) {
 	//	char c = getchar();
