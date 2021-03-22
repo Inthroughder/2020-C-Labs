@@ -168,7 +168,7 @@ int Calculator(long long* RPN, int rpnlen) {
 }
 
 int main(void) {
-	char In[BUFFER + 1];
+	char In[3001];
 	long long RPN[BUFFER];
 
 	//gets(In);
