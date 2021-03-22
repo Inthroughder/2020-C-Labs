@@ -1,5 +1,5 @@
 #include <stdio.h>
-//#include <string.h>
+#include <string.h>
 #define BUFFER 1000
 
 int optoint(char op) {
@@ -172,13 +172,13 @@ int main(void) {
 	int RPN[BUFFER];
 	int n;
 
-	//gets(In);
-	//n = strlen(In);
+	gets(In);
+	n = strlen(In);
 
-	for (n = 0; n < BUFFER + 1; n++){
+	//for (n = 0; n < BUFFER + 1; n++){
 	//	printf("\ninput i = %d", n);
-		if (scanf("%c", &In[n]) != 1) break;
-	}
+	//	if (scanf("%c", &In[n]) != 1) break;
+	//}
 
 	//for (n = 0; n < BUFFER + 1; n++) {
 	//	char c = getchar();
