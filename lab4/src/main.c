@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#define BUFFER 1000
+#define BUFFER 3000
 
 int optoint(char op) {
 	if (op == '+') {
@@ -168,13 +168,13 @@ int Calculator(long long* RPN, int rpnlen) {
 }
 
 int main(void) {
-	char In[3001];
+	char In[BUFFER + 1];
 	long long RPN[BUFFER];
 
 	//gets(In);
 	//n = strlen(In);
 
-	char* k = fgets(In, 3000, stdin);
+	char* k = fgets(In, BUFFER, stdin);
 	//printf("k = %d\n", k);
 	int n = strlen(In) - 1;
 	if ((n == 0) || (k == 0)) {
