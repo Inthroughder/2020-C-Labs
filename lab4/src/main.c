@@ -190,7 +190,7 @@ int main(void) {
 		return 0;
 	}
 
-	In[n + 1] = "\n";
+	In[n + 1] = '#';
 
 	int rpnlen = ItoP(In, n, RPN);
 	if (rpnlen == -1) {
