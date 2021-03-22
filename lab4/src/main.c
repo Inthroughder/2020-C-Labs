@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include "header.h"
 #define BUFFER 3000
 
 int main(void) {
