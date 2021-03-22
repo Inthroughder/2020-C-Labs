@@ -17,7 +17,6 @@ int optoint(char op) {
 int InputCheck(char *S, int n) {
 	int CBScur = 0;
 	for (int i = 0; i < n; i++) {
-		//printf("\nInputCheck i = %d", i);
 		if (S[i] == '(') {
 			CBScur++;
 		} else if (S[i] == ')') {
@@ -37,12 +36,6 @@ int InputCheck(char *S, int n) {
 }
 
 int ItoP(char* Input, int isize, long long* RPN) {
-	//printf("\nInput [char]:");
-	//for (int j = 0; j < isize; j++) printf(" %c", Input[j]);
-	//printf("\nInput [int]:");
-	//for (int j = 0; j < isize; j++) printf(" %d", Input[j]);
-	//printf("\n");
-
 	char OpsStack[BUFFER];
 	int ostop = -1;
 	int curnum = 1;
@@ -114,11 +107,6 @@ int ItoP(char* Input, int isize, long long* RPN) {
 			}
 
 		}
-
-		//printf("\n________ItoP i = %d\nOpsStack:", i);
-		//for (int j = 0; j <= ostop; j++) printf("%c ", OpsStack[j]);
-		//printf("\nRPN: ");
-		//for (int j = 0; j < curout; j++) printf("%d ", RPN[j]);
 	}
 
 	for (int i = ostop; i >= 0; i--) {
@@ -171,21 +159,12 @@ int main(void) {
 	char In[BUFFER + 1];
 	long long RPN[BUFFER];
 
-	//gets(In);
-	//n = strlen(In);
-
 	char* k = fgets(In, BUFFER, stdin);
-	//printf("k = %d\n", k);
 	int n = strlen(In) - 1;
 	if ((n == 0) || (k == 0)) {
 		printf("syntax error");
 		return 0;
 	}
-
-	//for (n = 0; n < BUFFER + 1; n++) {
-	//	char c = getchar();
-	//	if (c != "e") In[n] = c; else break;
-	//}
 
 	if (InputCheck(In, n) == 0) {
 		printf("syntax error");
@@ -199,10 +178,6 @@ int main(void) {
 		printf("syntax error");
 		return 0;
 	}
-	//printf("\n curout = %d\n", rpnlen);
-	//for (int i = 0; i < rpnlen; i++) {
-	//	printf(" %d", RPN[i]);
-	//}
 
 	Calculator(RPN, rpnlen);
 
