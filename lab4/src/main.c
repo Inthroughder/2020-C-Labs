@@ -36,7 +36,7 @@ int InputCheck(char *S, int n) {
 	return 1;
 }
 
-int ItoP(char* Input, int isize, int* RPN) {
+int ItoP(char* Input, int isize, long long* RPN) {
 	//printf("\nInput [char]:");
 	//for (int j = 0; j < isize; j++) printf(" %c", Input[j]);
 	//printf("\nInput [int]:");
@@ -103,14 +103,14 @@ int ItoP(char* Input, int isize, int* RPN) {
 				if ((Input[i] == 48) && ((Input[i + 1] >= 48) && (Input[i + 1] <= 57)) == 1) return -1;
 				RPN[curout] = Input[i] - 48;
 			} else {
-				RPN[curout] = RPN[curout] * curnum + (Input[i] - 48);
+				RPN[curout] = RPN[curout] * 10 + (Input[i] - 48);
 			}
 
 			if (((Input[i + 1] >= 48) && (Input[i + 1] <= 57)) == 0) {
 				curout++;
 				curnum = 1;
 			} else {
-				curnum = curnum * 10;
+				curnum = 2;
 			}
 
 		}
@@ -130,7 +130,7 @@ int ItoP(char* Input, int isize, int* RPN) {
 	
 }
 
-int Calculator(int* RPN, int rpnlen) {
+int Calculator(long long* RPN, int rpnlen) {
 	int Stack[BUFFER];
 	int top = -1;
 	for (int i = 0; i < rpnlen; i++) {
@@ -169,7 +169,7 @@ int Calculator(int* RPN, int rpnlen) {
 
 int main(void) {
 	char In[BUFFER + 1];
-	int RPN[BUFFER];
+	long long RPN[BUFFER];
 
 	//gets(In);
 	//n = strlen(In);
