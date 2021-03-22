@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #define BUFFER 3000
 
 int optoint(char op) {
