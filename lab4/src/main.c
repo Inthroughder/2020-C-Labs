@@ -174,9 +174,10 @@ int main(void) {
 	//gets(In);
 	//n = strlen(In);
 
-	fgets(In, BUFFER, stdin);
+	int k = fgets(In, BUFFER, stdin);
+	//printf("k = %d\n", k);
 	int n = strlen(In) - 1;
-	if (n == 0) {
+	if ((n == 0) || (k == 0)) {
 		printf("syntax error");
 		return 0;
 	}
