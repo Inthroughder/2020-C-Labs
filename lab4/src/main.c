@@ -188,7 +188,7 @@ int main(void) {
 	//}
 
 	if (InputCheck(In, n) == 0) {
-		printf("syntax error");
+		printf("\nsyntax error");
 		return 0;
 	}
 
