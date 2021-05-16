@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define _CRT_SECURE_NO_WARNINGS
 #define BUFFER 32 + 256 * 8 + 510 + 514 // first is length; seconds and third is tree; last is whatever
 
@@ -22,7 +23,22 @@ int LetterCounter(int* CharacterTable, FILE* f, int* inputLength) {
 	return leaves;
 }
 
-int HTBuilder(int* CharacterTable, struct knot *Tree) {
+int HTSorter(struct knot* Tree, int leaves) {
+
+	for (int i = 1; i < leaves; i++) {
+		int j = i - 1;
+		struct knot cur = Tree[i];
+		while ((j >= 0) && (cur.count < Tree[j].count)) {
+			Tree[j + 1] = Tree[j];
+			j--;
+		}
+		Tree[j + 1] = cur;
+	}
+
+	return 0;
+}
+
+int HTBuilder(int* CharacterTable, struct knot* Tree) {
 
 	//creating "leaves"
 	int leaves = 0;
@@ -44,21 +60,6 @@ int HTBuilder(int* CharacterTable, struct knot *Tree) {
 		Tree[leaves + i].pointer_l = &Tree[2 * i];
 		Tree[leaves + i].pointer_r = &Tree[2 * i + 1];
 		HTSorter(&Tree[i * 2 + 2], leaves - i - 1);
-	}
-
-	return 0;
-}
-
-int HTSorter(struct knot* Tree, int leaves) {
-
-	for (int i = 1; i < leaves; i++) {
-		int j = i - 1;
-		struct knot cur = Tree[i];
-		while ((j >= 0) && (cur.count < Tree[j].count)) {
-			Tree[j + 1] = Tree[j];
-			j--;
-		}
-		Tree[j + 1] = cur;
 	}
 
 	return 0;
@@ -101,6 +102,26 @@ int HTCoder(struct knot *curKnot, char* Output, int *counter) {
 	return 0;
 }
 
+int OutputWriter(int mode, char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
+	if (mode) {
+		//last
+		fwrite(Output, sizeof(char), counter / 8, fo);
+		if (counter % 8 != 0) {
+			char t = Output[counter / 8];
+			t = ((t >> (8 - counter % 8)) << (8 - counter % 8));
+			fwrite(&t, sizeof(char), 1, fo);
+		}
+	}
+	else {
+		//mid
+		fwrite(Output, sizeof(char), counter / 8, fo);
+		Output[0] = Output[counter / 8];
+		memset(&Output[1], 0, BUFFER - 1);
+		OutputCreator(Output, counter % 8, fi, fo, CodesTable);
+	}
+	return 0;
+}
+
 int OutputCreator(char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
 	while (counter < BUFFER - 8) {
 		int c = fgetc(fi);
@@ -117,25 +138,6 @@ int OutputCreator(char* Output, int counter, FILE* fi, FILE* fo, char** CodesTab
 		}
 	}
 	OutputWriter(0, Output, counter, fi, fo, CodesTable); //mid-writing output
-	return 0;
-}
-
-int OutputWriter(int mode, char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
-	if (mode) {
-		//last
-		fwrite(Output, sizeof(char), counter / 8, fo);
-		if (counter % 8 != 0) {
-			char t = Output[counter / 8];
-			t = ((t >> (8 - counter % 8)) << (8 - counter % 8));
-			fwrite(&t, sizeof(char), 1, fo);
-		}
-	} else {
-		//mid
-		fwrite(Output, sizeof(char), counter / 8, fo);
-		Output[0] = Output[counter / 8];
-		memset(&Output[1], 0, BUFFER - 1);
-		OutputCreator(Output, counter % 8, fi, fo, CodesTable);
-	}
 	return 0;
 }
 
