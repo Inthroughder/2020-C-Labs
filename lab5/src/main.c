@@ -100,6 +100,8 @@ int HTCoder(struct knot *curKnot, unsigned char* Output, int *counter) {
 	return 0;
 }
 
+int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable);
+
 int OutputWriter(int mode, unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
 	if (mode) {
 		//last
