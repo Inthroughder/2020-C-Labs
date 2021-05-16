@@ -174,14 +174,14 @@ int HTDecoder(struct knot *startKnot, struct knot *curKnot, int* curKnotMem, FIL
 }
 
 int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, int inputLength, int curPos, int t) {
-	if ((curPos > 7) && (t)) {
-		Input[0] = Input[1];
-		Input[1] = Input[2];
-		t = fread(Input + 2, sizeof(char), 1, fi);
-		curPos = curPos - 8;
-	}
 
 	for (int i = 0; i < inputLength; i++) {
+		while ((curPos > 7) && (t)) {
+			Input[0] = Input[1];
+			Input[1] = Input[2];
+			t = fread(Input + 2, sizeof(char), 1, fi);
+			curPos = curPos - 8;
+		}
 		struct knot curKnot = *startKnot;
 		while (curKnot.letter == -1) {
 			unsigned char c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
