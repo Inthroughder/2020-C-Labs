@@ -66,7 +66,7 @@ int HTBuilder(int* CharacterTable, struct knot* Tree) {
 
 int CTBuilder(struct knot curKnot, char** CodesTable, char* curCode, int curCodeLen) {
 	
-	if ((curKnot.pointer_l == NULL) || (curKnot.pointer_r == NULL)) {
+	if (curKnot.pointer_l == NULL) {
 		for (int i = 0; i <= curCodeLen; i++) {
 			CodesTable[curKnot.letter][i] = curCode[i];
 		}
@@ -75,6 +75,7 @@ int CTBuilder(struct knot curKnot, char** CodesTable, char* curCode, int curCode
 		curCode[curCodeLen + 1] = '\0';
 		CTBuilder(*(curKnot.pointer_l), CodesTable, curCode, curCodeLen + 1);
 		curCode[curCodeLen] = '1';
+		curCode[curCodeLen + 1] = '\0';
 		CTBuilder(*(curKnot.pointer_r), CodesTable, curCode, curCodeLen + 1);
 	}
 
@@ -215,8 +216,15 @@ int main(void) {
 
 		int inputLength = 0;
 		int leaves = LetterCounter(CharacterTable, fi, &inputLength);
+		if (inputLength == 0) return 0;
 
 		HTBuilder(CharacterTable, HT);
+
+		//debug
+		//printf("\n\ninputLength = %d; HT = \n\n", inputLength);
+		//for (int i = 0; i < 2 * leaves - 1; i++) {
+		//	printf("\nHT[%d] = %X\n", i, HT[i].letter);
+		//}
 
 		char* CodesTable[256];
 		char* p = malloc(leaves * 257 * sizeof(char));
@@ -229,7 +237,18 @@ int main(void) {
 				CodesTable[i] = NULL;
 			}
 		}
-		CTBuilder(HT[leaves * 2 - 2], CodesTable, malloc(sizeof(char) * 9), 0);
+		char curCode[257] = { '\0' };
+		if (leaves == 1) {
+			CodesTable[HT[0].letter] = "1\0";
+		} else {
+			CTBuilder(HT[leaves * 2 - 2], CodesTable, curCode, 0);
+		}
+		//debug
+		//for (int i = 0; i < 256; i++) {
+		//	if (CharacterTable[i] != 0) {
+		//		printf("\n%d = %s\n", i, CodesTable[i]);
+		//	}
+		//}
 
 		fwrite(&inputLength, 1, sizeof(int), fo);
 		int counter = 0;
@@ -244,7 +263,7 @@ int main(void) {
 
 		int inputLength;
 		int t = fread(&inputLength, sizeof(int), 1, fi);
-		if (t == 0) return 0;
+		if ((t == 0) || (inputLength == 0)) return 0;
 		unsigned char Input[3] = { 0 };
 		t = fread(&Input, sizeof(char), 3, fi);
 		if (t > 1) t = 1;
