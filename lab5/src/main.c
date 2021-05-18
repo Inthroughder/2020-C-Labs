@@ -5,13 +5,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define BUFFER 32 + 256 * 256 + 511 + 514
 
-struct knot {
-	int letter;
-	int count;
-	struct knot *pointer_l;
-	struct knot *pointer_r;
-};
-
 int main(void) {
 	FILE *fo, *fi;
 	char mode[3];
