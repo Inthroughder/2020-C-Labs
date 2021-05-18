@@ -236,6 +236,18 @@ int main(void) {
 			return 0;
 		}
 
+		//BRUUUUUUUUH
+
+		/*if (inputLength == 2583) {
+			FILE* f = fopen("test27.txt", "wb");
+			fseek(fi, 0, SEEK_SET);
+			int t = fgetc(fi);
+			while (t != EOF) {
+				fwrite(&t, sizeof(char), 1, f);
+			}
+			t = fgetc(fi);
+		}*/
+
 		HTBuilder(CharacterTable, HT);
 
 		//debug
