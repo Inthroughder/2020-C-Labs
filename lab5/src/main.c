@@ -2,13 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 #define _CRT_SECURE_NO_WARNINGS
-#define BUFFER 32 + 256 * 257 + 510 + 5140 // first is length; seconds and third is tree; last is whatever
+#define BUFFER 32 + 256 * 256 + 511 + 514 // first is length; seconds and third is tree (codes and knots); last is whatever
 
 struct knot {
 	int letter;
 	int count;
-	struct knot* pointer_l;
-	struct knot* pointer_r;
+	struct knot *pointer_l;
+	struct knot *pointer_r;
 };
 
 int LetterCounter(int* CharacterTable, FILE* f, int* inputLength) {
@@ -55,9 +55,9 @@ int HTBuilder(int* CharacterTable, struct knot* Tree) {
 	for (int i = 0; i < leaves - 1; i++) {
 		Tree[leaves + i].letter = -1;
 		Tree[leaves + i].count = Tree[2 * i].count + Tree[2 * i + 1].count;
-		Tree[leaves + i].pointer_l = &Tree[2 * i];
-		Tree[leaves + i].pointer_r = &Tree[2 * i + 1];
-		HTSorter(&Tree[i * 2 + 2], leaves - i - 1);
+		Tree[leaves + i].pointer_l = Tree + 2 * i;
+		Tree[leaves + i].pointer_r = Tree + 2 * i + 1;
+		HTSorter(Tree + i * 2 + 2, leaves - i - 1);
 	}
 
 	return 0;
@@ -65,13 +65,12 @@ int HTBuilder(int* CharacterTable, struct knot* Tree) {
 
 
 int CTBuilder(struct knot curKnot, char** CodesTable, char* curCode, int curCodeLen) {
-
+	
 	if (curKnot.pointer_l == NULL) {
 		for (int i = 0; i <= curCodeLen; i++) {
 			CodesTable[curKnot.letter][i] = curCode[i];
 		}
-	}
-	else {
+	} else {
 		curCode[curCodeLen] = '0';
 		curCode[curCodeLen + 1] = '\0';
 		CTBuilder(*(curKnot.pointer_l), CodesTable, curCode, curCodeLen + 1);
@@ -83,7 +82,7 @@ int CTBuilder(struct knot curKnot, char** CodesTable, char* curCode, int curCode
 	return 0;
 }
 
-int HTCoder(struct knot* curKnot, unsigned char* Output, int* counter) {
+int HTCoder(struct knot *curKnot, unsigned char* Output, int *counter) {
 	if ((*curKnot).pointer_l != NULL) {
 		Output[*counter / 8] = Output[*counter / 8] | (1 << (7 - *counter % 8)); // that's 1
 		(*counter)++;
@@ -109,9 +108,10 @@ int OutputWriter(int mode, unsigned char* Output, int counter, FILE* fi, FILE* f
 		//last
 		fwrite(Output, sizeof(char), counter / 8, fo);
 		if (counter % 8 != 0) {
-			char t = Output[counter / 8];
-			t = ((t >> (8 - counter % 8)) << (8 - counter % 8));
-			fwrite(&t, sizeof(char), 1, fo);
+			fwrite(Output + (counter / 8), sizeof(char), 1, fo);
+			//char t = Output[counter / 8];
+			//t = ((t >> (8 - counter % 8)) << (8 - counter % 8));
+			//fwrite(&t, sizeof(char), 1, fo);
 		}
 	}
 	else {
@@ -126,13 +126,16 @@ int OutputWriter(int mode, unsigned char* Output, int counter, FILE* fi, FILE* f
 
 int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
 	while (counter < BUFFER - 8) {
+		//printf("\ncounter in OC = %d", counter);
 		int c = fgetc(fi);
+		//printf("\ngot %d just now", c);
 		if (c == EOF) {
 			OutputWriter(1, Output, counter, fi, fo, CodesTable); //last output
 			return 0;
 		}
 
 		for (unsigned int i = 0; i < strlen(CodesTable[c]); i++) {
+			//printf("\n\nin OC i = %d, c = %d", i, c);
 			if (CodesTable[c][i] == '1') {
 				Output[counter / 8] = Output[counter / 8] | (1 << (7 - counter % 8)); // that's 1
 			}
@@ -143,7 +146,8 @@ int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char**
 	return 0;
 }
 
-int HTDecoder(struct knot* startKnot, struct knot* curKnot, int* curKnotMem, FILE* fi, int* curPos, unsigned char* Input, int* t) {
+int HTDecoder(struct knot *startKnot, struct knot *curKnot, int* curKnotMem, FILE* fi, int *curPos, unsigned char* Input, int* t) {
+	//printf("\n\ncurpos = %d", *curPos);
 	if ((*curPos > 7) && (*t)) {
 		Input[0] = Input[1];
 		Input[1] = Input[2];
@@ -159,16 +163,14 @@ int HTDecoder(struct knot* startKnot, struct knot* curKnot, int* curKnotMem, FIL
 		*curKnotMem = *curKnotMem + 2;
 		HTDecoder(startKnot, (*curKnot).pointer_r, curKnotMem, fi, curPos, Input, t);
 		HTDecoder(startKnot, (*curKnot).pointer_l, curKnotMem, fi, curPos, Input, t);
-	}
-	else {
+	} else {
 		(*curKnot).pointer_r = NULL;
 		(*curKnot).pointer_l = NULL;
 		unsigned char c = 0;
-
+		
 		if (*curPos % 8 == 0) {
 			c = Input[*curPos / 8];
-		}
-		else {
+		} else {
 			c = (Input[*curPos / 8] << (*curPos % 8)) | (Input[*curPos / 8 + 1] >> (8 - *curPos % 8));
 		}
 		*curPos = *curPos + 8;
@@ -177,9 +179,10 @@ int HTDecoder(struct knot* startKnot, struct knot* curKnot, int* curKnotMem, FIL
 	return 0;
 }
 
-int Decoder(struct knot* startKnot, FILE* fi, FILE* fo, unsigned char* Input, int inputLength, int curPos, int t) {
+int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, int inputLength, int curPos, int t) {
 
 	for (int i = 0; i < inputLength; i++) {
+		//printf("\ndecoding %d letter", i);
 		while ((curPos > 7) && (t)) {
 			Input[0] = Input[1];
 			Input[1] = Input[2];
@@ -191,8 +194,7 @@ int Decoder(struct knot* startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 			unsigned char c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
 			if (c == 1) {
 				curKnot = *(curKnot.pointer_r);
-			}
-			else {
+			} else {
 				curKnot = *(curKnot.pointer_l);
 			}
 			curPos++;
@@ -204,7 +206,7 @@ int Decoder(struct knot* startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 }
 
 int main(void) {
-	FILE* fo, * fi;
+	FILE *fo, *fi;
 	struct knot HT[512 - 1];
 	char mode[3];
 
@@ -212,6 +214,8 @@ int main(void) {
 	fo = fopen("out.txt", "wb");
 	int t = fread(mode, sizeof(char), 3, fi);
 	if (t == 0) return 0;
+	//printf("\n0");
+	//printf("\nt = %d", t);
 
 	if (mode[0] == 'c') {
 
@@ -220,6 +224,7 @@ int main(void) {
 
 		int inputLength = 0;
 		int leaves = LetterCounter(CharacterTable, fi, &inputLength);
+		//printf("\nlength = %d, leaves = %d", inputLength, leaves);
 		if (inputLength == 0) return 0;
 
 		HTBuilder(CharacterTable, HT);
@@ -236,16 +241,14 @@ int main(void) {
 			if (CharacterTable[i] != 0) {
 				CodesTable[i] = p;
 				p = p + 257;
-			}
-			else {
+			} else {
 				CodesTable[i] = NULL;
 			}
 		}
-
+	
 		if (leaves == 1) {
 			CodesTable[HT[0].letter] = "1\0";
-		}
-		else {
+		} else {
 			char curCode[257] = { '\0' };
 			CTBuilder(HT[leaves * 2 - 2], CodesTable, curCode, 0);
 		}
@@ -263,14 +266,17 @@ int main(void) {
 		fseek(fi, 0, SEEK_SET);
 		int t = fread(mode, sizeof(char), 3, fi);
 		if (t == 0) return 0;
+		//printf("\n\nbefore the OC counter = %d", counter);
 		OutputCreator(Output, counter, fi, fo, CodesTable);
+		//printf("%d %d", inputLength, leaves);
 
-	}
-	else {
-
+	} else {
+		//printf("\n1");
 		int inputLength;
 		int t = fread(&inputLength, sizeof(int), 1, fi);
 		if ((t == 0) || (inputLength == 0)) return 0;
+		//printf("\ninputLength = %d", inputLength);
+		//printf("\n2");
 		unsigned char Input[3] = { 0 };
 		t = fread(&Input, sizeof(char), 3, fi);
 		if (t >= 1) t = 1;
@@ -279,10 +285,11 @@ int main(void) {
 		HTDecoder(HT, HT, &curKnot, fi, &curPos, Input, &t);
 		Decoder(HT, fi, fo, Input, inputLength, curPos, t);
 
+		//printf("%d", inputLength);
 	}
 
 	fclose(fi);
 	fclose(fo);
 
-	return 0;
+	return 0; //1126, 17 different
 }
