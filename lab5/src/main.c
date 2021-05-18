@@ -117,7 +117,7 @@ int OutputWriter(int mode, unsigned char* Output, int counter, FILE* fi, FILE* f
 		//mid
 		fwrite(Output, sizeof(char), counter / 8, fo);
 		Output[0] = Output[counter / 8];
-		memset(&Output[1], 0, BUFFER - 1);
+		memset(Output + 1, 0, BUFFER - 1);
 		OutputCreator(Output, counter % 8, fi, fo, CodesTable);
 	}
 	return 0;
@@ -237,10 +237,11 @@ int main(void) {
 				CodesTable[i] = NULL;
 			}
 		}
-		char curCode[257] = { '\0' };
+	
 		if (leaves == 1) {
 			CodesTable[HT[0].letter] = "1\0";
 		} else {
+			char curCode[257] = { '\0' };
 			CTBuilder(HT[leaves * 2 - 2], CodesTable, curCode, 0);
 		}
 		//debug
@@ -266,7 +267,7 @@ int main(void) {
 		if ((t == 0) || (inputLength == 0)) return 0;
 		unsigned char Input[3] = { 0 };
 		t = fread(&Input, sizeof(char), 3, fi);
-		if (t > 1) t = 1;
+		if (t >= 1) t = 1;
 		int curKnot = 0;
 		int curPos = 0;
 		HTDecoder(HT, HT, &curKnot, fi, &curPos, Input, &t);
