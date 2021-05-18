@@ -320,8 +320,6 @@ int main(void) {
 		t = fread(&Input, sizeof(char), 3, fi);
 		if (t >= 1) t = 1;
 		int curPos = 0;
-		
-		int curKnotMem = 0;
 
 		int genPos = 0;
 		struct knot* startKnot = malloc(sizeof(struct knot));
