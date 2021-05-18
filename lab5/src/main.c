@@ -183,14 +183,13 @@ int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 	for (int i = 0; i < inputLength; i++) {
 		//printf("\ndecoding %d letter", i);
 		while ((curPos > 7) && (t == 1)) {
-			Input[0] = Input[1];
-			Input[1] = Input[2];
-			t = fread(Input + 2, sizeof(char), 1, fi);
+			for (int i = 0; i < 32; i++) Input[i] = Input[i + 1];
+			t = fread(Input + 32, sizeof(char), 1, fi);
 			curPos = curPos - 8;
 		}
 		struct knot curKnot = *startKnot;
 		while (curKnot.letter == -1) {
-			int c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
+			unsigned char c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
 			if (c == 1) {
 				curKnot = *(curKnot.pointer_r);
 			} else {
@@ -237,8 +236,8 @@ int main(void) {
 
 		//BRUUUUUUUUH
 
-		/*if (inputLength == 2583) {
-			FILE* f = fopen("test27.txt", "wb");
+		if (inputLength == 28656) {
+			FILE* f = fopen("test33.txt", "wb");
 			fseek(fi, 0, SEEK_SET);
 			int t = fgetc(fi);
 			while (t != EOF) {
@@ -246,7 +245,11 @@ int main(void) {
 				t = fgetc(fi);
 			}
 		}
-		t = fread(mode, sizeof(char), 3, fi);*/
+		t = fread(mode, sizeof(char), 3, fi);
+
+		/*FILE* h = fopen("length.txt", "wb");
+		fwrite(&inputLength, sizeof(int), 1, h);
+		fclose(h);*/
 
 		HTBuilder(CharacterTable, HT);
 
@@ -316,14 +319,21 @@ int main(void) {
 		}
 		//printf("\ninputLength = %d", inputLength);
 		//printf("\n2");
-		unsigned char Input[3] = { 0 };
-		t = fread(&Input, sizeof(char), 3, fi);
+		unsigned char Input[33] = { 0 };
+		t = fread(Input, sizeof(char), 3, fi);
 		if (t >= 1) t = 1;
 		int curPos = 0;
 
 		int genPos = 0;
 		struct knot* startKnot = malloc(sizeof(struct knot));
 		HTDecoder(startKnot, fi, &curPos, Input, &t, &genPos);
+		for (int i = 3; i < 33; i++) {
+			if (t == 1) {
+				t = fread(Input + i, sizeof(char), 1, fi);
+			} else {
+				break;
+			}
+		}
 		Decoder(startKnot, fi, fo, Input, inputLength, curPos, t);
 
 		/*for (int i = 0; i < 30; i++) {
