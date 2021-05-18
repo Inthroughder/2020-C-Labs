@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "header.h"
 #define _CRT_SECURE_NO_WARNINGS
 #define BUFFER 32 + 256 * 256 + 511 + 514
 
