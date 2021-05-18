@@ -194,6 +194,7 @@ int MFree(struct knot* point) {
 		MFree((*point).pointer_r);
 		free(point);
 	}
+	return 0;
 }
 
 int main(void) {
