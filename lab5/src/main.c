@@ -213,7 +213,12 @@ int main(void) {
 	fi = fopen("in.txt", "rb");
 	fo = fopen("out.txt", "wb");
 	int t = fread(mode, sizeof(char), 3, fi);
-	if (t == 0) return 0;
+	if (t == 0) { 
+		fclose(fi);
+		fclose(fo);
+		return 0;
+	}
+
 	//printf("\n0");
 	//printf("\nt = %d", t);
 
@@ -225,7 +230,11 @@ int main(void) {
 		int inputLength = 0;
 		int leaves = LetterCounter(CharacterTable, fi, &inputLength);
 		//printf("\nlength = %d, leaves = %d", inputLength, leaves);
-		if (inputLength == 0) return 0;
+		if (inputLength == 0) {
+			fclose(fi);
+			fclose(fo);
+			return 0;
+		}
 
 		HTBuilder(CharacterTable, HT);
 
@@ -265,7 +274,11 @@ int main(void) {
 
 		fseek(fi, 0, SEEK_SET);
 		int t = fread(mode, sizeof(char), 3, fi);
-		if (t == 0) return 0;
+		if (t == 0) {
+			fclose(fi);
+			fclose(fo);
+			return 0;
+		}
 		//printf("\n\nbefore the OC counter = %d", counter);
 		OutputCreator(Output, counter, fi, fo, CodesTable);
 		//printf("%d %d", inputLength, leaves);
@@ -274,7 +287,11 @@ int main(void) {
 		//printf("\n1");
 		int inputLength;
 		int t = fread(&inputLength, sizeof(int), 1, fi);
-		if ((t == 0) || (inputLength == 0)) return 0;
+		if ((t == 0) || (inputLength == 0)) {
+			fclose(fi);
+			fclose(fo);
+			return 0;
+		}
 		//printf("\ninputLength = %d", inputLength);
 		//printf("\n2");
 		unsigned char Input[3] = { 0 };
