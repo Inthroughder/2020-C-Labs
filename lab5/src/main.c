@@ -146,9 +146,10 @@ int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char**
 	return 0;
 }
 
-int HTDecoder(struct knot *startKnot, struct knot *curKnot, int* curKnotMem, FILE* fi, int *curPos, unsigned char* Input, int* t) {
-	//printf("\n\ncurpos = %d", *curPos);
-	if ((*curPos > 7) && (*t)) {
+int HTDecoder(struct knot *curKnot, FILE* fi, int *curPos, unsigned char* Input, char* t, int *genPos) {
+	//printf("\n\ncalled HTDecoder; curPos = %d, genPos = %d", *curPos, *genPos);
+
+	while ((*curPos > 7) && (*t == 1)) {
 		Input[0] = Input[1];
 		Input[1] = Input[2];
 		*t = fread(Input + 2, sizeof(char), 1, fi);
@@ -156,25 +157,23 @@ int HTDecoder(struct knot *startKnot, struct knot *curKnot, int* curKnotMem, FIL
 	}
 	unsigned char cur = 1 & (Input[*curPos / 8] >> (7 - *curPos % 8));
 	(*curPos)++;
+	(*genPos)++;
 	if (cur == 1) {
+		//printf("\n\ntook 1 at curPos = %d, genPos = %d", *curPos - 1, *genPos - 1);
 		(*curKnot).letter = -1;
-		(*curKnot).pointer_r = startKnot + *curKnotMem + 1;
-		(*curKnot).pointer_l = startKnot + *curKnotMem + 2;
-		*curKnotMem = *curKnotMem + 2;
-		HTDecoder(startKnot, (*curKnot).pointer_r, curKnotMem, fi, curPos, Input, t);
-		HTDecoder(startKnot, (*curKnot).pointer_l, curKnotMem, fi, curPos, Input, t);
+		(*curKnot).pointer_r = malloc(sizeof(struct knot));
+		(*curKnot).pointer_l = malloc(sizeof(struct knot));
+		HTDecoder((*curKnot).pointer_r, fi, curPos, Input, t, genPos);
+		HTDecoder((*curKnot).pointer_l, fi, curPos, Input, t, genPos);
 	} else {
+		//printf("\n\ntook 0 at curPos = %d, genPos = %d", *curPos - 1, *genPos - 1);
 		(*curKnot).pointer_r = NULL;
 		(*curKnot).pointer_l = NULL;
-		unsigned char c = 0;
-		
-		if (*curPos % 8 == 0) {
-			c = Input[*curPos / 8];
-		} else {
-			c = (Input[*curPos / 8] << (*curPos % 8)) | (Input[*curPos / 8 + 1] >> (8 - *curPos % 8));
-		}
+		unsigned char c = (Input[*curPos / 8] << (*curPos % 8)) | (Input[*curPos / 8 + 1] >> (8 - *curPos % 8));
 		*curPos = *curPos + 8;
+		*genPos = *genPos + 8;
 		(*curKnot).letter = c;
+		//printf("\n\ntook a letter %X; now curPos = %d, genPos = %d", c, *curPos, *genPos);
 	}
 	return 0;
 }
@@ -183,7 +182,7 @@ int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 
 	for (int i = 0; i < inputLength; i++) {
 		//printf("\ndecoding %d letter", i);
-		while ((curPos > 7) && (t)) {
+		while ((curPos > 7) && (t == 1)) {
 			Input[0] = Input[1];
 			Input[1] = Input[2];
 			t = fread(Input + 2, sizeof(char), 1, fi);
@@ -191,7 +190,7 @@ int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 		}
 		struct knot curKnot = *startKnot;
 		while (curKnot.letter == -1) {
-			unsigned char c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
+			int c = 1 & (Input[curPos / 8] >> (7 - curPos % 8));
 			if (c == 1) {
 				curKnot = *(curKnot.pointer_r);
 			} else {
@@ -207,7 +206,6 @@ int Decoder(struct knot *startKnot, FILE* fi, FILE* fo, unsigned char* Input, in
 
 int main(void) {
 	FILE *fo, *fi;
-	struct knot HT[512 - 1];
 	char mode[3];
 
 	fi = fopen("in.txt", "rb");
@@ -224,6 +222,7 @@ int main(void) {
 
 	if (mode[0] == 'c') {
 
+		struct knot HT[512 - 1];
 		unsigned char Output[BUFFER] = { 0 };
 		int CharacterTable[256] = { 0 };
 
@@ -244,11 +243,22 @@ int main(void) {
 			int t = fgetc(fi);
 			while (t != EOF) {
 				fwrite(&t, sizeof(char), 1, f);
+				t = fgetc(fi);
 			}
-			t = fgetc(fi);
-		}*/
+		}
+		t = fread(mode, sizeof(char), 3, fi);*/
 
 		HTBuilder(CharacterTable, HT);
+
+		//FILE* fht = fopen("HTCoding.txt", "wb");
+		/*for (int i = 0; i < leaves * 2 - 1; i++) {
+			printf("\n\nknot number %d, letter = %X, count = %d", i, HT[i].letter, HT[i].count);
+			if (HT[i].pointer_l != NULL) {
+				printf(", left pointer has count = %d and letter = %X, right pointer has count = %d and letter = %X", (*(HT[i].pointer_l)).count, (*(HT[i].pointer_l)).letter, (*(HT[i].pointer_r)).count, (*(HT[i].pointer_r)).letter);
+
+			}
+		}*/
+
 
 		//debug
 		//printf("\n\ninputLength = %d; HT = \n\n", inputLength);
@@ -295,10 +305,10 @@ int main(void) {
 		OutputCreator(Output, counter, fi, fo, CodesTable);
 		//printf("%d %d", inputLength, leaves);
 
-	} else {
+	} else if (mode[0] == 'd') {
 		//printf("\n1");
 		int inputLength;
-		int t = fread(&inputLength, sizeof(int), 1, fi);
+		char t = fread(&inputLength, sizeof(int), 1, fi);
 		if ((t == 0) || (inputLength == 0)) {
 			fclose(fi);
 			fclose(fo);
@@ -309,10 +319,23 @@ int main(void) {
 		unsigned char Input[3] = { 0 };
 		t = fread(&Input, sizeof(char), 3, fi);
 		if (t >= 1) t = 1;
-		int curKnot = 0;
 		int curPos = 0;
-		HTDecoder(HT, HT, &curKnot, fi, &curPos, Input, &t);
-		Decoder(HT, fi, fo, Input, inputLength, curPos, t);
+		
+		int curKnotMem = 0;
+
+		int genPos = 0;
+		struct knot* startKnot = malloc(sizeof(struct knot));
+		HTDecoder(startKnot, fi, &curPos, Input, &t, &genPos);
+		Decoder(startKnot, fi, fo, Input, inputLength, curPos, t);
+
+		/*for (int i = 0; i < 30; i++) {
+			if (HT[i].pointer_l != NULL) {
+				printf("\n\nknot number %d, letter = %X, left pointer = %X, right pointer = %X", i, HT[i].letter, (*(HT[i].pointer_l)).letter, (*(HT[i].pointer_r)).letter);
+			} else {
+				printf("\n\nknot number %d, letter = %X", i, HT[i].letter);
+			}
+			
+		}*/
 
 		//printf("%d", inputLength);
 	}
