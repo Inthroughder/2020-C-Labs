@@ -3,6 +3,13 @@
 #include <stdlib.h>
 #define BUFFER 32 + 256 * 256 + 511 + 514
 
+struct knot {
+	int letter;
+	int count;
+	struct knot *pointer_l;
+	struct knot *pointer_r;
+};
+
 //coding
 
 int LetterCounter(int* CharacterTable, FILE* f, int* inputLength) {
