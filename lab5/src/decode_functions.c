@@ -1,6 +1,145 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#define BUFFER 32 + 256 * 256 + 511 + 514
+
+struct knot {
+	int letter;
+	int count;
+	struct knot *pointer_l;
+	struct knot *pointer_r;
+};
+
+//coding
+
+int LetterCounter(int* CharacterTable, FILE* f, int* inputLength) {
+	int leaves = 0;
+	int t = fgetc(f);
+	while (t != EOF) {
+		if (CharacterTable[t] == 0) leaves++;
+		CharacterTable[t]++;
+		(*inputLength)++;
+		t = fgetc(f);
+	}
+	return leaves;
+}
+
+int HTSorter(struct knot* Tree, int leaves) {
+
+	for (int i = 1; i < leaves; i++) {
+		int j = i - 1;
+		struct knot cur = Tree[i];
+		while ((j >= 0) && (cur.count < Tree[j].count)) {
+			Tree[j + 1] = Tree[j];
+			j--;
+		}
+		Tree[j + 1] = cur;
+	}
+
+	return 0;
+}
+
+int HTBuilder(int* CharacterTable, struct knot* Tree) {
+
+	int leaves = 0;
+	for (int i = 0; i < 256; i++) {
+		if (CharacterTable[i] != 0) {
+			Tree[leaves].letter = i;
+			Tree[leaves].count = CharacterTable[i];
+			Tree[leaves].pointer_l = NULL;
+			Tree[leaves].pointer_r = NULL;
+			leaves++;
+		}
+	}
+	HTSorter(Tree, leaves);
+
+	for (int i = 0; i < leaves - 1; i++) {
+		Tree[leaves + i].letter = -1;
+		Tree[leaves + i].count = Tree[2 * i].count + Tree[2 * i + 1].count;
+		Tree[leaves + i].pointer_l = Tree + 2 * i;
+		Tree[leaves + i].pointer_r = Tree + 2 * i + 1;
+		HTSorter(Tree + i * 2 + 2, leaves - i - 1);
+	}
+
+	return 0;
+}
+
+
+int CTBuilder(struct knot curKnot, char** CodesTable, char* curCode, int curCodeLen) {
+	
+	if (curKnot.pointer_l == NULL) {
+		for (int i = 0; i <= curCodeLen; i++) {
+			CodesTable[curKnot.letter][i] = curCode[i];
+		}
+	} else {
+		curCode[curCodeLen] = '0';
+		curCode[curCodeLen + 1] = '\0';
+		CTBuilder(*(curKnot.pointer_l), CodesTable, curCode, curCodeLen + 1);
+		curCode[curCodeLen] = '1';
+		curCode[curCodeLen + 1] = '\0';
+		CTBuilder(*(curKnot.pointer_r), CodesTable, curCode, curCodeLen + 1);
+	}
+
+	return 0;
+}
+
+int HTCoder(struct knot *curKnot, unsigned char* Output, int *counter) {
+	if ((*curKnot).pointer_l != NULL) {
+		Output[*counter / 8] = Output[*counter / 8] | (1 << (7 - *counter % 8));
+		(*counter)++;
+		HTCoder((*curKnot).pointer_r, Output, counter);
+		HTCoder((*curKnot).pointer_l, Output, counter);
+	}
+	else {
+		(*counter)++;
+		for (int i = 0; i < 8; i++) {
+			if (((*curKnot).letter >> (7 - i)) & 1) {
+				Output[*counter / 8] = Output[*counter / 8] | (1 << (7 - *counter % 8));
+			}
+			(*counter)++;
+		}
+	}
+	return 0;
+}
+
+int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable);
+
+int OutputWriter(int mode, unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
+	if (mode) {
+		fwrite(Output, sizeof(char), counter / 8, fo);
+		if (counter % 8 != 0) {
+			fwrite(Output + (counter / 8), sizeof(char), 1, fo);
+		}
+	}
+	else {
+		fwrite(Output, sizeof(char), counter / 8, fo);
+		Output[0] = Output[counter / 8];
+		memset(Output + 1, 0, BUFFER - 1);
+		OutputCreator(Output, counter % 8, fi, fo, CodesTable);
+	}
+	return 0;
+}
+
+int OutputCreator(unsigned char* Output, int counter, FILE* fi, FILE* fo, char** CodesTable) {
+	while (counter < BUFFER - 8) {
+		int c = fgetc(fi);
+		if (c == EOF) {
+			OutputWriter(1, Output, counter, fi, fo, CodesTable);
+			return 0;
+		}
+
+		for (unsigned int i = 0; i < strlen(CodesTable[c]); i++) {
+			if (CodesTable[c][i] == '1') {
+				Output[counter / 8] = Output[counter / 8] | (1 << (7 - counter % 8));
+			}
+			counter++;
+		}
+	}
+	OutputWriter(0, Output, counter, fi, fo, CodesTable);
+	return 0;
+}
+
+//decoding
 
 int HTDecoder(struct knot *curKnot, FILE* fi, int *curPos, unsigned char* Input, char* t) {
 
