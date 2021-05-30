@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int BFS(int* Matrix, int* Result, int* Cond, int v, int* curFreeRes, int curVertex) {
 
@@ -93,6 +94,9 @@ int main() {
 		printf("%d ", *(Result + i));
 	}
 
+	free(Matrix);
+	free(Cond);
+	free(Result);
+
 	return 0;
 }
-
