@@ -63,10 +63,16 @@ int main() {
 		t = scanf("%d %d", &from, &to);
 		if ((from > v) || (from < 1) || (to > v) || (to < 0)) {
 			printf("bad vertex");
+			free(Matrix);
+			free(Cond);
+			free(Result);
 			return 0;
 		}
 		if (t < 2) {
 			printf("bad number of lines");
+			free(Matrix);
+			free(Cond);
+			free(Result);
 			return 0;
 		}
 		*(Matrix + (from - 1) * v + to - 1) = 1;
@@ -74,6 +80,9 @@ int main() {
 
 	if (v == 0) {
 		printf("0");
+		free(Matrix);
+		free(Cond);
+		free(Result);
 		return 0;
 	}
 
@@ -86,6 +95,9 @@ int main() {
 
 		if (t == -1) {
 			printf("impossible to sort");
+			free(Matrix);
+			free(Cond);
+			free(Result);
 			return 0;
 		}
 	}
