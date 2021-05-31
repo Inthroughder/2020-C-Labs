@@ -32,7 +32,10 @@ int main() {
 
 	int v, e;
 	int t = scanf("%d", &v);
-	if ((t != 1) || (v < 0) || (v > 2000)) {
+	if (t < 1) {
+		printf("bad number of lines");
+		return 0;
+	} else if ((v < 0) || (v > 2000)){
 		printf("bad number of vertices");
 		return 0;
 	}
