@@ -6,7 +6,6 @@ int BFS(char* Matrix, int* Result, char* Cond, int v, int* curFreeRes, int curVe
 	for (int i = 0; i < v; i++) {
 		char t = 1 & ((*(Matrix + (curVertex * v + i) / 8)) >> (7 - (curVertex * v + i) % 8));
 		if (t == 1) {
-			//printf("found a way from %d to %d\n", curVertex + 1, i + 1);
 			if (*(Cond + i) == 0) {
 				*(Cond + i) = 1;
 				int t = BFS(Matrix, Result, Cond, v, curFreeRes, i);
@@ -16,15 +15,11 @@ int BFS(char* Matrix, int* Result, char* Cond, int v, int* curFreeRes, int curVe
 			}
 
 		}
-		//else {
-		//	printf("can't find a way from %d to %d\n", curVertex + 1, i + 1);
-		//}
+
 	}
-	//printf("ended BFS for %d\n", curVertex + 1);
 	*(Cond + curVertex) = 2;
 	*(Result + *(curFreeRes)) = curVertex + 1;
 	(*curFreeRes)++;
-	//printf("now %d vertex is in condition %d; added it in Result at position %d\n", curVertex + 1, *(Cond + curVertex), (*curFreeRes) - 1);
 	return 0;
 }
 
@@ -49,7 +44,6 @@ int main() {
 		return 0;
 	}
 
-	//int* Matrix = malloc(v * v / 32 + 1);
 	char* Matrix = malloc(((v * v / 8) + 1) * sizeof(char));
 	char* Cond = malloc(v * sizeof(char));
 	int* Result = malloc(v * sizeof(int));
@@ -84,7 +78,6 @@ int main() {
 			return 0;
 		}
 		
-		//*(Matrix + (from - 1) * v + to - 1) = 1;
 		*(Matrix + ((from - 1) * v + to - 1) / 8) = *(Matrix + ((from - 1) * v + to - 1) / 8) | (1 << (7 - ((from - 1) * v + to - 1) % 8));
 	}
 
@@ -99,8 +92,7 @@ int main() {
 
 	int curFreeRes = 0;
 	for (int i = 0; i < v; i++) {
-		if (*(Cond + i) != 2) { 
-			//printf("calling BFS for %d vertex in condition %d\n", i + 1, *(Cond + i));
+		if (*(Cond + i) != 2) {
 			t = BFS(Matrix, Result, Cond, v, &curFreeRes, i);
 		}
 
