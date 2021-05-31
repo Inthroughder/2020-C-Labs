@@ -32,12 +32,12 @@ int main() {
 
 	int v, e;
 	int t = scanf("%d", &v);
-	if ((t == 0) || (v < 0) || (v > 2000)) {
+	if ((t != 1) || (v < 0) || (v > 2000)) {
 		printf("bad number of vertices");
 		return 0;
 	}
 	t = scanf("%d", &e);
-	if (t == 0) {
+	if (t != 1) {
 		printf("bad number of lines");
 		return 0;
 	}
