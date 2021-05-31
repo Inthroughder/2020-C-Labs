@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int BFS(int* Matrix, int* Result, int* Cond, int v, int* curFreeRes, int curVertex) {
+int BFS(char* Matrix, int* Result, char* Cond, int v, int* curFreeRes, int curVertex) {
 
 	for (int i = 0; i < v; i++) {
 
@@ -49,8 +49,9 @@ int main() {
 		return 0;
 	}
 
-	int* Matrix = malloc(v * v * sizeof(int));
-	int* Cond = malloc(v * sizeof(int));
+	//int* Matrix = malloc(v * v / 32 + 1);
+	char* Matrix = malloc(v * v * sizeof(char));
+	char* Cond = malloc(v * sizeof(char));
 	int* Result = malloc(v * sizeof(int));
 
 	for (int i = 0; i < v; i++) {
@@ -118,3 +119,4 @@ int main() {
 
 	return 0;
 }
+
