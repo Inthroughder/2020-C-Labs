@@ -64,13 +64,7 @@ int main() {
 	for (int i = 0; i < e; i++) {
 		int from, to;
 		t = scanf("%d %d", &from, &to);
-		if ((from > v) || (from < 1) || (to > v) || (to < 0)) {
-			printf("bad vertex");
-			free(Matrix);
-			free(Cond);
-			free(Result);
-			return 0;
-		}
+
 		if (t < 2) {
 			printf("bad number of lines");
 			free(Matrix);
@@ -78,6 +72,15 @@ int main() {
 			free(Result);
 			return 0;
 		}
+
+		if ((from > v) || (from < 1) || (to > v) || (to < 0)) {
+			printf("bad vertex");
+			free(Matrix);
+			free(Cond);
+			free(Result);
+			return 0;
+		}
+		
 		*(Matrix + (from - 1) * v + to - 1) = 1;
 	}
 
