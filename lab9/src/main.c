@@ -1,55 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-
-int Dijkstra(unsigned int* Matrix, char* Marked, unsigned int* Distance, int v, unsigned int* Parent, int f, int s) {
-
-	unsigned int pathsToFinish = 0;
-	unsigned int min = 0;
-	int curVert = s;
-	while (min < ((unsigned int)INT_MAX + (unsigned int)1)) {
-
-		Marked[curVert] = 1;
-		for (int i = 0; i < v; i++) {
-			if (Matrix[curVert * v + i] < ((unsigned int)INT_MAX + (unsigned int)1)) {//edge existence check
-
-				if (i == f) pathsToFinish++;
-
-				if (Distance[i] == ((unsigned int)INT_MAX + (unsigned int)2)) {//no path yet
-
-
-					if ((Matrix[curVert * v + i] + Distance[curVert]) > INT_MAX) {
-						Distance[i] = (unsigned int)INT_MAX + (unsigned int)1;
-					} else {
-						Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
-					}
-
-					Parent[i] = curVert;
-					}
-				else {//path already exists
-
-					if (Matrix[curVert * v + i] + Distance[curVert] < Distance[i]) {
-						Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
-						Parent[i] = curVert;
-					}
-
-				}
-
-			}
-		}
-
-		min = (unsigned int)INT_MAX + (unsigned int)1;
-		for (int i = 0; i < v; i++) {// finding minimum distance
-			if ((Distance[i] < min) && (Marked[i] == 0)) {
-				min = Distance[i];
-				curVert = i;
-			}
-		}
-
-	}
-
-	return pathsToFinish;
-}
+#include "header.h"
 
 int main() {
 
@@ -105,7 +57,7 @@ int main() {
 			free(Matrix);
 			return 0;
 		}
-		if ((length > INT_MAX) || (length < 0)) { //or length < 1?
+		if ((length > INT_MAX) || (length < 0)) {
 			printf("bad length");
 			free(Matrix);
 			return 0;
@@ -125,13 +77,6 @@ int main() {
 	Distance[s - 1] = 0;
 
 	unsigned int overflow = Dijkstra(Matrix, Marked, Distance, v, Parent, f - 1, s - 1);
-	//printf("\n\noverflow = %u\n\n", overflow);
-
-	//printf("\n\nDistances: ");
-	//for (int i = 0; i < v; i++) {
-	//	printf("%u ", Distance[i]);
-	//}
-	//printf("\n\n");
 
 	for (int i = 0; i < v; i++) {
 		if (Distance[i] == (unsigned int)INT_MAX + (unsigned int)2) {
@@ -154,7 +99,6 @@ int main() {
 		printf("\n");
 		f--;
 		s--;
-		//printf("\n%u", Distance[f - 1]); //path
 		while (f != s) {
 			printf("%d ", f + 1);
 			f = Parent[f];
