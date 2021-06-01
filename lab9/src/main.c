@@ -2,59 +2,53 @@
 #include <stdlib.h>
 #include <limits.h>
 
-int Dijkstra(unsigned int* Matrix, char* Marked, unsigned int* Distance, int v, unsigned int* Parent) {
+int Dijkstra(unsigned int* Matrix, char* Marked, unsigned int* Distance, int v, unsigned int* Parent, int f, int s) {
 
+	unsigned int pathsToFinish = 0;
 	unsigned int min = 0;
-	int curVert = 0;
-	while (min <= INT_MAX) {
-		min = (unsigned int)INT_MAX + (unsigned int)1;
+	int curVert = s;
+	while (min < ((unsigned int)INT_MAX + (unsigned int)1)) {
+
+		Marked[curVert] = 1;
 		for (int i = 0; i < v; i++) {
+			if (Matrix[curVert * v + i] < ((unsigned int)INT_MAX + (unsigned int)1)) {//edge existence check
+
+				if (i == f) pathsToFinish++;
+
+				if (Distance[i] == ((unsigned int)INT_MAX + (unsigned int)2)) {//no path yet
+
+
+					if ((Matrix[curVert * v + i] + Distance[curVert]) > INT_MAX) {
+						Distance[i] = (unsigned int)INT_MAX + (unsigned int)1;
+					} else {
+						Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
+					}
+
+					Parent[i] = curVert;
+					}
+				else {//path already exists
+
+					if (Matrix[curVert * v + i] + Distance[curVert] < Distance[i]) {
+						Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
+						Parent[i] = curVert;
+					}
+
+				}
+
+			}
+		}
+
+		min = (unsigned int)INT_MAX + (unsigned int)1;
+		for (int i = 0; i < v; i++) {// finding minimum distance
 			if ((Distance[i] < min) && (Marked[i] == 0)) {
 				min = Distance[i];
 				curVert = i;
 			}
 		}
 
-		//printf("\n min is %u, curVert is %d", min, curVert);
-
-		Marked[curVert] = 1;
-		for (int i = 0; i < v; i++) {
-			if (Matrix[curVert * v + i] < (unsigned int)INT_MAX + (unsigned int)1) {
-				
-
-				for (int i = 0; i < v; i++) {
-
-					if (Matrix[curVert * v + i] < (unsigned int)INT_MAX + (unsigned int)1) {//edge check
-
-						if (Distance[i] == (unsigned int)INT_MAX + (unsigned int)2) {//no path yet
-
-							if (Matrix[curVert * v + i] + Distance[curVert] > INT_MAX) {
-								Distance[i] = (unsigned int)INT_MAX + (unsigned int)1;
-							}
-							else {
-								Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
-							}
-							Parent[i] = curVert;
-
-						}
-						else {//path already exists
-
-							if (Matrix[curVert * v + i] + Distance[curVert] < Distance[i]) {
-								Distance[i] = Matrix[curVert * v + i] + Distance[curVert];
-								Parent[i] = curVert;
-							}
-
-						}
-
-					}
-				}
-
-
-			}
-		}
 	}
 
-	return 0;
+	return pathsToFinish;
 }
 
 int main() {
@@ -130,7 +124,8 @@ int main() {
 	}
 	Distance[s - 1] = 0;
 
-	Dijkstra(Matrix, Marked, Distance, v, Parent);
+	unsigned int overflow = Dijkstra(Matrix, Marked, Distance, v, Parent, f - 1, s - 1);
+	//printf("\n\noverflow = %u\n\n", overflow);
 
 	//printf("\n\nDistances: ");
 	//for (int i = 0; i < v; i++) {
@@ -153,10 +148,9 @@ int main() {
 	if (Distance[f - 1] == (unsigned int)INT_MAX + (unsigned int)2) {
 		printf("\nno path");
 	}
-	else if (Distance[f - 1] == (unsigned int)INT_MAX + (unsigned int)1) {
+	else if ((Distance[f - 1] == (unsigned int)INT_MAX + (unsigned int)1) && (overflow > 1)) {
 		printf("\noverflow");
-	}
-	else {
+	} else {
 		printf("\n");
 		f--;
 		s--;
