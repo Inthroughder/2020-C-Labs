@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 
 int Dijkstra(unsigned int* Matrix, char* Marked, unsigned int* Distance, int v, unsigned int* Parent) {
 
